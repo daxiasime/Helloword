@@ -7,4 +7,3 @@ while len(people)>2:
     print('{:2d}自杀了'.format(people.pop(0)))
 print(f'\n安全的位置是{people[0],people[1]}')
 
-# WISOFJFJFVMSGIHH
