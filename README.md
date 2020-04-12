@@ -1,3 +1,2 @@
 # Helloword
-my first github repository 
-print('hello world !')
+这里做些自己学习的笔记。
