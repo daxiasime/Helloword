@@ -25,18 +25,16 @@ def process_data(id,threadName, q):
             if q.empty():
                 return 
             data = q.get()
-
-           # print ("%s processing %s" % (threadName, data))
+            # print ("%s processing %s" % (threadName, data))
         time.sleep(1)
 def process_bar(current,total):
     index=round((1-current/total)*100,1)
     s1=' '*round((100-index)/2)
     s2='▊'*round(index/2)
-
     print(f"|{s2+s1}|{index}%\r",end="")
 
         
-threadList = ["Thread-1", "Thread-2", "Thread-3", "Thread-4", "Thread-5"]
+threadList = ["Thread-1", "Thread-2"]
 nameList = [str(i) for i in range(100)]
 workQueue = queue.Queue(100)
 threads = []
