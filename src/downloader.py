@@ -111,46 +111,52 @@ def get_address(url):
 
 # url="http://meng.wuyou-zuida.com/20200404/28799_829a960d/index.m3u8"
 
-url="https://www.diediaow.com/play/17815-0-3.html"
+
+def main_(url):
+
+	_PATH="./m3u8downloader"
+	_THREAD_COUNT=5
+	if not os.path.exists(_PATH):
+		os.mkdir(_PATH)
+	name,url=get_address(url)
+	_PATH=_PATH+'/'+name
+	if not os.path.exists(_PATH):
+		os.mkdir(_PATH)
+	_PATH=_PATH+'/'
+
+	finsh_download=False
+	threads=[]
+	ts_data=add_equeue(url)
+	size=ts_data.qsize()
+	if ts_data!=None:
+		for threadID in [i for i in range(_THREAD_COUNT)]:
+			thread = download_m3u8(threadID, ts_data)
+			thread.start()
+			threads.append(thread)
+		# 等待队列清空
+		while not ts_data.empty():
+			time.sleep(0.2)
+			process_bar(ts_data.qsize(),size)
+		# 等待所有线程完成
+
+		for t in threads:
+			t.join()
+		os.chdir(_PATH)
+		print(f"cat *.ts >> {name}.mp4")
+		os.system(f"cat *.ts >> {name}.mp4")
+
+		if os.path.exists(f"{name}.mp4"):
+			os.system(f"rm -r *.ts")
+		else:
+			print("合并出错！")
+		print ("\n退出主线程")
+
+	else:
+		print('erro')
 
 _PATH="./m3u8downloader"
 _THREAD_COUNT=5
-
-if not os.path.exists(_PATH):
-	os.mkdir(_PATH)
-name,url=get_address(url)
-_PATH=_PATH+'/'+name
-if not os.path.exists(_PATH):
-	os.mkdir(_PATH)
-_PATH=_PATH+'/'
-
-finsh_download=False
-threads=[]
-ts_data=add_equeue(url)
-size=ts_data.qsize()
-if ts_data!=None:
-	for threadID in [i for i in range(_THREAD_COUNT)]:
-		thread = download_m3u8(threadID, ts_data)
-		thread.start()
-		threads.append(thread)
-	# 等待队列清空
-	while not ts_data.empty():
-		time.sleep(0.2)
-		process_bar(ts_data.qsize(),size)
-	# 等待所有线程完成
-
-	for t in threads:
-		t.join()
-	os.chdir(_PATH)
-	print(f"cat *.ts >> {name}.mp4")
-	os.system(f"cat *.ts >> {name}.mp4")
-
-	if os.path.exists(f"{name}.mp4"):
-		os.system(f"rm -r *.ts")
-	else:
-		print("合并出错！")
-	print ("\n退出主线程")
-
-else:
-	print('erro')
-
+for page in range(5,10):
+	url=f"https://www.diediaow.com/play/17815-0-{page}.html"
+	main_(url)
+	time.sleep(3)

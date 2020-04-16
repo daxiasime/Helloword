@@ -1,7 +1,3 @@
-import queue
-q=queue.Queue(10)
-for i in range(10):
-	q.put(i)
-q.get()
-q.task_done()
-print(q.qsize())
+import jieba
+jieba.add_word("奥利给")
+print(jieba.lcut("经常有意见分歧 我是一个小可爱，加油奥利给"))
