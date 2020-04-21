@@ -1,43 +1,15 @@
-# import jieba
-# jieba.add_word("奥利给")
-# print(jieba.lcut("经常有意见分歧 我是一个小可爱，加油奥利给"))
-import pandas
-import numpy
-import json
-# s="人们在一家超市外保持间距排队等待购物"
-# def devide(s,max_step=4):
-# 	a=[]
-# 	for j in range(1,max_step+1):
-# 		c=[]
-# 		for i in range(len(s)):
-# 			c.append(s[i:i+j])
-# 		a=a+c
-# 	return list(set(a))
-# res=devide(s,max_step=5)
+import re
+import os
+path="/media/devin/新加卷/缓存/bilibili/NLP/"
+name=['001：自然语言处理训练营.flv', '002：训练营介绍课程体系介绍.flv', '003：NLP定义以及歧义性.flv', '004：案例：机器翻译01.flv', '005：案例：机器翻译02.flv', '006：NLP的应用场景.flv', '007：NLP的关键技术.flv', '008：算法复杂度介绍.flv', '009：课后答疑.flv', '010：简单的复杂度的回顾.flv', '011：归并排序.flv', '012：MasterTheorem.flv', '013：斐波那契数的时间复杂度.flv', '014：斐波那契数的空间复杂度.flv', '015：斐波那契数的循环实现.flv', '016：PvsNPvsNPHardvsNPComplete.flv', '017：问答系统介绍.flv', '018：Review一只狗和两只猫的故事——心理学与DL,RL-01.flv', '019：Review一只狗和两只猫的故事——心理学与DL,RL-02.flv', '020：文本处理的流程.flv', '021：分词-前向最大匹配.flv', '022：分词-后向最大匹配.flv', '023：分词-考虑语言模型.flv', '024：分词-维特比算法.flv', '025：拼写错误纠正.flv', '026：拼写纠错（2）.flv', '027：拼写纠错（3）.flv', '028：停用词过滤，Stemming操作.flv', '029：文本的表示.flv', '030：文本的相似度.flv', '031：tf-idf文本表示.flv', '032：词向量介绍.flv', '033：学习词向量.flv', '034：倒排表.flv', '035：NoisyChannelModel.flv', '036：语言模型介绍.flv', '037：ChainRule和MarkovAssumption.flv', '038：Unigram,Bigram,N-gram.flv', '039：估计语言模型的概率.flv', '040：评估语言模型：Perplexity.flv', '041：Add-oneSmoothing.flv', '042：Add-KSmoothing.flv', '043：Interpolation.flv', '044：2019.2.17Review基于几个例子，书写动态规划-01.flv', '045：2019.2.17Review基于几个例子，书写动态规划-02.flv', '046：2019.2.17Review基于几个例子，书写动态规划-03.flv', '047：Lesson6直播.flv', '048：01在训练数据里没有见过的怎么处理？.flv', '049：02Good-TurningSmoothing.flv', '050：03利用语言模型生成句子.flv', '051：04专家系统与基于概率统计学习.flv', '052：05专家系统介绍.flv', '053：06逻辑推理.flv', '054：07CaseStudy风控.flv', '055：08一些难题.flv', '056：09机器学习介绍01.flv', '057：10机器学习介绍02.flv', '058：11朴素贝叶斯介绍.flv', '059：12CaseStudy垃圾邮件过滤.flv', '060：lambda表达式.flv', '061：map函数的应用.flv', '062：filter过滤器.flv', '063：reduce函数.flv', '064：python三大推导式.flv', '065：闭包.flv', '066：装饰器一.flv', '067：装饰器二.flv', '068：初识numpy.flv', '069：numpy数组的创建.flv', '070：numpy的矢量化运算.flv', '071：numpy的花式索引.flv', '072：numpy数组转置和轴对换.flv', '073：条件逻辑转数组.flv', '074：数学运算与排序.flv', '075：numpy文件处理.flv', '076：线性代数函数和随机漫步例子.flv', '077：词性标注-实战（1）.flv', '078：词性标注--实战（2）.flv', '079：词性标注-实战（3）.flv', '080：词性标注-实战（4）.flv', '081：词性标注-实战（5）.flv', '082：初识series类型.flv', '083：初识dataframe.flv', '084：重新索引、数学运算和数据对齐.flv', '085：dataframe和series之间的运算和排序.flv', '086：层次化索引.flv', '087：dataframe的层次化索引的访问和汇总运算.flv', '088：pandas读写csv文件.flv', '089：pandas读取excel文件并画图.flv', '090：matplotlib可视化及学习方法建议.flv', '091：虚拟环境的搭建.flv', '092：创建第一个爬虫项目.flv', '093：调试运行爬虫程序.flv', '094：13-scrapyshell调试方法进行元素定位.flv', '095：访问首页列表中的url.flv', '096：获取帖子标题和内容.flv', '097：处理帖子内容中的特殊标签.flv', '098：获取帖子发送时间及位于的楼数.flv', '099：爬虫的bug调试与修复.flv', '100：数据持久化代码开发.flv', '101：数据入库.flv', '102：importancesamplenegtivesamplence-01.flv', '103：importancesamplenegtivesamplence-02.flv', '104：importancesamplenegtivesamplence-03.flv', '105：精确率和召回率.flv', '106：逻辑回归介绍.flv', '107：逻辑回归是线性分类器.flv', '108：逻辑回归的目标函数.flv', '109：梯度下降法.flv', '110：逻辑回归的梯度下降法.flv', '111：当线性可分的时候.flv', '112：关于面试的话题-01.flv', '113：关于面试的话题-02.flv', '114：关于面试的话题-03.flv', '115：直播-01.flv', '116：直播-02.flv', '117：直播-03.flv', '118：直播-04.flv', '119：直播-05.flv', '120：直播-06.flv', '121：直播-07.flv', '122：直播-08.flv', '123：直播-09.flv', '124：直播-10.flv', '125：直播-11.flv', '126：当数据线性可分割的时候.flv', '127：限制参数变得太大.flv', '128：模型复杂度与过拟合.flv', '129：怎么避免过拟合.flv', '130：正则介绍.flv', '131：L1VSL2.flv', '132：review数据结构串讲-01.flv', '133：review数据结构串讲-02.flv', '134：AffectiveComputing&amp;情绪识别实战.flv', '135：交叉验证（1）.flv', '136：交叉验证（2）.flv', '137：正则的作用.flv', '138：MLEVSMAP介绍.flv', '139：正则的使用.flv', '140：交叉验证.flv', '141：参数搜索策略.flv', '142：高级：正则的灵活应用.flv', '143：总结.flv', '144：MLE与MAP.flv', '145：LassoRegression介绍.flv', '146：特征选择技术.flv', '147：LASSO介绍.flv', '148：CoordinateDescent.flv', '149：CoordinateDescentforLASSO.flv', '150：其他LASSOSolver.flv', '151：变分推断指数族家族lda.flv', '152：Optimization.flv', '153：OptimizationisEverywhere.flv', '154：Optimization-Categories.flv', '155：ConvexOptimization-GlobalvsLocalOptimal.flv', '156：判断一个函数是凸函数.flv', '157：解决一个具体问题1.flv', '158：解决一个具体问题2.flv', '159：回顾凸函数.flv', '160：介绍SetCoverProblem.flv', '161：Approach1-ExhaustiveSearch.flv', '162：Approach2-贪心算法.flv', '163：Approach3-Optimization.flv', '164：总结.flv', '165：回顾-逻辑回归的梯度下降法.flv', '166：梯度下降法的复杂度.flv', '167：梯度下降法的收敛分析.flv', '168：凸函数性质以及L-Lipschitz条件.flv', '169：收敛性推导.flv', '170：LinearClassifier.flv', '171：Margin的计算.flv', '172：SVM的目标函数：Hardconstraint.flv', '173：SVM的目标函数：Softconstraint.flv', '174：HingeLoss.flv', '175：Primal-Dual介绍.flv', '176：attentiontransformerbert-01.flv', '177：attentiontransformerbert-02.flv', '178：Capstone项目介绍.flv', '179：LinearSVM的缺点.flv', '180：数据映射到高维.flv', '181：拉格朗日-等号条件处理.flv', '182：拉格朗日-不等号条件处理.flv', '183：KKT条件.flv', '184：SVM的KKT条件.flv', '185：Primal-Dual介绍.flv', '186：SVM的Dual推导.flv', '187：KernelTrick.flv', '188：信息抽取介绍直播.flv', '189：命名实体识别介绍.flv', '190：简历分析场景.flv', '191：搭建NER分类器.flv', '192：方法介绍.flv', '193：基于规则的方法.flv', '194：投票决策方法.flv', '195：特征工程与特征表示01.flv', '196：特征工程与特征表示02.flv', '197：问答.flv', '198：信息抽取介绍.flv', '199：OntologicalRelation.flv', '200：关系抽取方法介绍.flv', '201：基于规则的方法.flv', '202：基于监督学习的方法.flv', '203：cnnrnntransformer对比-01.flv', '204：cnnrnntransformer对比-02.flv', '205：关系抽取.flv', '206：bootstrap算法的缺点.flv', '207：SnowBall算法.flv', '208：生成模板.flv', '209：生成tuple与模板评估.flv', '210：评估记录+过滤.flv', '211：SnowBall总结.flv', '212：EntityDisambiguation(实体消歧)介绍.flv', '213：实体消歧算法.flv', '214：EntityResolution(实体统一).flv', '215：实体统一算法.flv', '216：Co-referenceResolution(指代消解)介绍.flv', '217：什么是句法分析.flv', '218：句法分析的应用.flv', '219：语法.flv', '220：PCFG.flv', '221：评估语法树.flv', '222：寻找最好的树.flv', '223：CNFForm.flv', '224：CKY算法.flv', '225：时序模型.flv', '226：HMM的介绍.flv', '227：HMM的应用例子.flv', '228：HMM的参数.flv', '229：HMM中的Inference问题.flv', '230：HMM中的FB算法1.flv', '231：HMM中的FB算法2.flv', '232：HMM中的FB算法3.flv', '233：DataRepresentation.flv', '234：LatentVariableModels.flv', '235：CompletevsIncompleteCase.flv', '236：MLEforCompleteandIncompleteCase.flv', '237：EMDerivation.flv', '238：RemarksonEM.flv', '239：K-means.flv', '240：K-meansCostFunction.flv', '241：MLEforGMM.flv', '244：HMM中的参数.flv', '245：CompletevsIncompleteCase.flv', '246：CompleteCase.flv', '247：IncompleteCase.flv', '248：EM算法回顾.flv', '249：FB算法回顾.flv', '250：估计PI.flv', '251：估计B.flv', '252：估计A.flv', '253：公司实际项目串讲-01.flv', '254：公司实际项目串讲-02.flv', '255：公司实际项目串讲-03.flv', '256：有向图与无向图模型.flv', '257：生成模型与判别模型.flv', '258：Log-LinearModel.flv', '259：Log-LinearModel与多元逻辑回归.flv', '260：CRF介绍.flv', '261：Inference问题.flv', '262：参数估计.flv', '263：wordvector词向量.flv', '264：GlobalGenerationofDistributedRepresentation.flv', '265：HowtoLearnWord2Vec-Intuition.flv', '266：Skip-GramModel.flv', '267：语料库.flv', '268：Word2Vec代码.flv', '269：训练SkipGram问题.flv', '270：SkipGram另一种目标函数构建.flv', '271：SkipGram的negativesampling.flv', '272：评估词向量.flv', '273：词向量在推荐系统中的应用.flv', '274：梯度提升树.flv', '275：答疑.flv', '276：Word2vec.flv', '277：LearningwithSubword.flv', '278：Whensubwordisneeded.flv', '279：LearnEmbeddingfromLanguageModel.flv', '280：Whatarepotentialsolutions.flv', '281：ElmoatGlance.flv', '282：CategoryofWordRepresentation.flv', '283：神经网络介绍.flv', '284：激活函数.flv', '285：MLP.flv', '286：多层神经网络.flv', '287：UniversalApproximationTheorem.flv', '288：BiologicalInspiration.flv', '289：回顾神经网络.flv', '290：神经网络的损失函数.flv', '291：BP算法的核心流程.flv', '292：对输出层的梯度计算.flv', '293：对隐含层的梯度计算.flv', '294：对参数的梯度计算.flv', '295：对BP算法的总结.flv', '296：gradientchecking.flv', '297：深度学习与非凸函数.flv', '298：深度学习中的Plateau.flv', '299：SGD的收敛条件.flv', '300：EarlyStopping.flv', '301：为什么需要递归神经网络？.flv', '302：递归神经网络介绍.flv', '303：语言模型.flv', '304：RNN的深度.flv', '305：梯度爆炸和梯度消失.flv', '306：GradientClipping.flv', '307：LSTM的介绍.flv', '308：LSTM的应用.flv', '309：Bi-DirectionalLSTM.flv', '310：GatedRecurrentUnit.flv', '311：问答系统讲解01.flv', '312：问答系统讲解02.flv', '313：RepresentationLearning.flv', '314：Whatmakesgoodrepresentation-01.flv', '315：Whatmakesgoodrepresentation-02.flv', '316：Whatmakesgoodrepresentation-03.flv', '317：WhyDeep.flv', '318：WhyDeepLearningHardtoTrain.flv', '319：WaystoSolveTraining.flv', '320：Dropout介绍.flv', '321：为什么Dropout防止过拟合现象.flv', '322：机器翻译.flv', '323：MultimodalLearning.flv', '324：Seq2Seq模型.flv', '325：Seq2Seq训练介绍.flv', '326：InferenceDecoding.flv', '327：ExhausticSearch.flv', '328：BeamSearch.flv', '329：回顾MultimodalLearning.flv', '330：Attention注意力机制介绍.flv', '331：看图说话介绍.flv', '332：图像识别的注意力机制.flv', '333：基于GAN及强化学习的文本生成-01.flv', '334：基于GAN及强化学习的文本生成-02.flv', '335：回顾Seq2Seq模型.flv', '336：Seq2Seq的Attention.flv', '337：Self-Attention1.flv', '338：Self-Attention2.flv', '339：深度文本匹配-01.flv', '340：深度文本匹配-02.flv', '341：回顾Attention.flv', '342：RNNLSTM-basedmodels.flv', '343：Transformer的结构.flv', '344：EachEncoderBlock.flv', '345：Self-Attention.flv', '346：AddNormalize.flv', '347：BERT概念.flv', '348：回顾Languagemodel.flv', '349：maskedLanguagemodel.flv', '350：maskedLanguagemodel存在的问题.flv', '351：LSTM.flv', '352：BERT训练过程.flv', '353：PGM领域.flv', '354：主题模型.flv', '355：回顾不同模型的范畴ModelEstimation.flv', '356：预测的过程.flv', '357：GD，SGD，Adagrad算法.flv', '358：回顾LDA.flv', '359：举例说明生成的过程.flv', '360：从官方的角度讲解生成的过程.flv', '361：α到θi的生成.flv', '362：举例说明生成文章.flv', '363：gibbssampler.flv', '364：collapsedgibbssampling-01.flv', '365：collapsedgibbssampling-02.flv', '366：collapsedgibbssampling-03.flv', '367：collapsedgibbssampling-04.flv', '368：collapsedgibbssampling-05.flv', '369：推导过程01.flv', '370：推导过程02.flv', '371：推导过程03.flv', '372：Gibbs采样01.flv', '373：Gibbs采样02.flv', '374：Web-ScaleInformationExtractioninKnowItAll-01.flv', '375：Web-ScaleInformationExtractioninKnowItAll-02.flv', '376：核函数.flv', '377：直播-01.flv', '378：直播-02.flv', '379：直播-03.flv', '380：直播-04.flv', '381：直播-05.flv', '382：直播-06.flv', '383：直播-07.flv', '384：直播-01.flv', '385：直播-02.flv', '386：直播-03.flv', '387：直播-04.flv', '388：直播-05.flv', '389：直播-06.flv', '390：利用CRF模型做命名实体识别-01.flv', '391：利用CRF模型做命名实体识别-02.flv', '392：基于语料库训练Glove词向量模型-01.flv', '393：基于语料库训练Glove词向量模型-02.flv', '394：GMM-01.flv', '395：GMM-02.flv', '396：GMM-03.flv', '397：XLNet-BertAutoregressiveLM.flv', '398：改进思路.flv', '399：Bert的目标函数.flv', '400：permutation.flv', '401：pytorch实现skip-gram.flv', '402：Airbnb（KDD2018bestPaper）-01.flv', '403：Airbnb（KDD2018bestPaper）-02.flv', '404：直播-01.flv', '405：直播-02.flv', '406：直播-03.flv', '407：直播-04.flv']
+orig_name=[x for x in os.listdir(path)if x.split('_')[-1]=="0.flv"]
 
-# data=pandas.read_csv("../res/dict_.csv",sep='\t')
-# data_=numpy.array(data)
-# dic=[x[0].split(',') for x in data_]
-# dic={x[0]:x[1].split(' ')[0] for x in dic}
-# cost={}
-# for x in res:
-# 	cost[x]=100000
-# 	if dic.__contains__(x):
-# 		cost[x]=1/int(dic[x])
-# print(cost)
-st="让内会和议会的会议"
-a=[i for i in st]
-print(a)
-dump=[]
-s=set()
-for i in a:
-	if s.__contains__(i):
-		dump.append(i)
-	else:
-		s.add(i)
-print(dump)
-count=0
-for x in dump:
-	a[a.index(x)]=str(count)
-	count+=1
-print("".join(a))
+def index(text): return eval(x.split("_")[1])
+
+# orig_name.sort()
+print(orig_name)
+os.chdir(path)
+for x in  orig_name:
+	shell=f'mv {x} {name[index(x)-1]}'
+	print(shell)
+	os.system(shell)
